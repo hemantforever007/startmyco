@@ -171,10 +171,8 @@
     formData.append('service', service);
 
     // 1️⃣  Google Sheets — fire and forget (no-cors, saves silently)
-    var SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyK5fvYgji7aSxNIsIGGdhipwYZgZt_OwFtsNtr7ZoZZQbLzf9z_aw-slnVMbdJygkF_w/exec';  // ← paste your Apps Script URL here (Step B below)
-    if (SHEETS_URL !== 'https://script.google.com/macros/s/AKfycbyK5fvYgji7aSxNIsIGGdhipwYZgZt_OwFtsNtr7ZoZZQbLzf9z_aw-slnVMbdJygkF_w/exec') {
-      fetch(SHEETS_URL, { method: 'POST', mode: 'no-cors', body: formData });
-    }
+    var SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyK5fvYgji7aSxNIsIGGdhipwYZgZt_OwFtsNtr7ZoZZQbLzf9z_aw-slnVMbdJygkF_w/exec';
+    fetch(SHEETS_URL, { method: 'POST', mode: 'no-cors', body: formData });
 
     // 2️⃣  Formspree — primary, drives the success / error UI
     var FORMSPREE_URL = 'https://formspree.io/f/xaqzpagd';  // ← paste your Formspree URL here (Step A below)
