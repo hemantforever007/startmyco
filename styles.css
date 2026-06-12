@@ -227,6 +227,30 @@ button, input, select, textarea { font-family: inherit; }
 }
 .nav-phone svg { width: 15px; height: 15px; flex-shrink: 0; }
 
+.nav-whatsapp {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #16a34a;
+  white-space: nowrap;
+  transition: color var(--ease);
+}
+.nav-whatsapp svg { width: 17px; height: 17px; flex-shrink: 0; }
+.nav-whatsapp:hover { color: #15803d; }
+
+.mobile-whatsapp {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #16a34a !important;
+  padding: 4px 0;
+}
+.mobile-whatsapp svg { flex-shrink: 0; }
+
 /* Hamburger */
 .hamburger {
   display: none;

@@ -14,7 +14,9 @@
     navbar.classList.toggle('scrolled', window.scrollY > 20);
   }, { passive: true });
 
+ // Deployment id = AKfycbyK5fvYgji7aSxNIsIGGdhipwYZgZt_OwFtsNtr7ZoZZQbLzf9z_aw-slnVMbdJygkF_w
 
+ // URL  = https://script.google.com/macros/s/AKfycbyK5fvYgji7aSxNIsIGGdhipwYZgZt_OwFtsNtr7ZoZZQbLzf9z_aw-slnVMbdJygkF_w/exec
   /* ── Mobile menu toggle ───────────────────────────────── */
   var hamburger  = document.getElementById('hamburger');
   var mobileMenu = document.getElementById('mobileMenu');
@@ -150,15 +152,53 @@
     else      clearError(phoneInput, phoneErr);
 
     if (nErr || pErr) {
-      // Focus first error
       (nErr ? nameInput : phoneInput).focus();
       return;
     }
 
-    // Submission success (static — wire to your backend/CRM here)
-    form.hidden = true;
-    successMsg.hidden = false;
-    successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // ── Send to Formspree + Google Sheets ─────────────────
+    var submitBtn = form.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+
+    var name    = nameInput.value.trim();
+    var phone   = phoneInput.value.trim();
+    var service = document.getElementById('cfService').value || 'Not specified';
+
+    var formData = new FormData();
+    formData.append('name',    name);
+    formData.append('phone',   phone);
+    formData.append('service', service);
+
+    // 1️⃣  Google Sheets — fire and forget (no-cors, saves silently)
+    var SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyK5fvYgji7aSxNIsIGGdhipwYZgZt_OwFtsNtr7ZoZZQbLzf9z_aw-slnVMbdJygkF_w/exec';  // ← paste your Apps Script URL here (Step B below)
+    if (SHEETS_URL !== 'https://script.google.com/macros/s/AKfycbyK5fvYgji7aSxNIsIGGdhipwYZgZt_OwFtsNtr7ZoZZQbLzf9z_aw-slnVMbdJygkF_w/exec') {
+      fetch(SHEETS_URL, { method: 'POST', mode: 'no-cors', body: formData });
+    }
+
+    // 2️⃣  Formspree — primary, drives the success / error UI
+    var FORMSPREE_URL = 'https://formspree.io/f/xaqzpagd';  // ← paste your Formspree URL here (Step A below)
+    fetch(FORMSPREE_URL, {
+      method:  'POST',
+      body:    formData,
+      headers: { 'Accept': 'application/json' }
+    })
+    .then(function (res) {
+      if (res.ok) {
+        form.hidden = true;
+        successMsg.hidden = false;
+        successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Request Callback';
+        alert('Something went wrong. Please try again or call us at +91-9818426375');
+      }
+    })
+    .catch(function () {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Request Callback';
+      alert('Network error. Please try again or call us at +91-9818426375');
+    });
   });
 
 }());
